@@ -9,7 +9,7 @@ int sdl_init(t_vars &vars)
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 
-	vars.window = SDL_CreateWindow("OpenGL", 0, 0, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);
+	vars.window = SDL_CreateWindow(vars.name.c_str(), 0, 0, WIDTH, HEIGHT, SDL_WINDOW_OPENGL);
 	vars.context = SDL_GL_CreateContext(vars.window);
 	glewExperimental = GL_TRUE;
 
@@ -58,9 +58,6 @@ int sdl_init(t_vars &vars)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    vars.zoom = 2.0f;
-    vars.center_x = 0.0f;
-    vars.center_y = 0.0f;
     return 1;
 }
 
@@ -88,13 +85,29 @@ void deal_key(SDL_KeyboardEvent &event, t_vars &vars)
 			move(vars, 1, 0);
 			break;
 
-		case SDLK_UP:
+		case SDLK_LSHIFT:
 			zoom(vars, 1);
 			break;
 
-		case SDLK_DOWN:
+		case SDLK_LCTRL:
 			zoom(vars, -1);
-				break;
+			break;
+
+		case SDLK_UP:
+			next_julia(vars, 0, 1);
+			break;
+
+		case SDLK_DOWN:
+			next_julia(vars, 0, -1);
+			break;
+
+		case SDLK_LEFT:
+			next_julia(vars, -1, 0);
+			break;
+
+		case SDLK_RIGHT:
+			next_julia(vars, 1, 0);
+			break;
 
 		default:
 			break;
@@ -113,6 +126,8 @@ void main_loop(t_vars &vars)
 {
 	SDL_Event windowEvent;
 	vars.run = true;
+	// std::vector<float> pixel_data(WIDTH * HEIGHT, 0.0f);
+	// glm::vec4 ranges = glm::vec4(0.0001f, 0.33333f, 0.66667f, 1.00f);
 
 	while (vars.run)
 	{ 
@@ -145,6 +160,14 @@ void main_loop(t_vars &vars)
 		vars.shader->set_float("zoom", vars.zoom);
 		vars.shader->set_float("center_x", vars.center_x);
 		vars.shader->set_float("center_y", vars.center_y);
+		// vars.shader->set_vec4("color_ranges", ranges);
+		if (vars.name == "Julia")
+		{
+			vars.shader->set_float("julia_real", vars.julia_real);
+			vars.shader->set_float("julia_img", vars.julia_img);
+		}
+		// glReadPixels(0, 0, WIDTH, HEIGHT, GL_DEPTH_COMPONENT, GL_FLOAT, pixel_data.data());
+		// ranges = find_ranges(pixel_data);
 
 		glBindVertexArray(vars.VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

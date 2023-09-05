@@ -1,4 +1,4 @@
-NAME=test_sdl
+NAME=better_fractol
 CC=c++
 FLAGS=-Wall -Wextra -Werror -g
 SRCS=$(wildcard *.cpp) \

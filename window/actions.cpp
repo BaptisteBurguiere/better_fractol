@@ -23,3 +23,15 @@ void zoom(t_vars &vars, int dir)
 		vars.zoom *= 1.0 + ZOOM_SENSI;
 	}
 }
+
+void next_julia(t_vars &vars, int dir_x, int dir_y)
+{
+	if (dir_x == 1)
+		vars.julia_real += JULIA_SENSI;
+	else if (dir_x == -1)
+		vars.julia_real -= JULIA_SENSI;
+	else if (dir_y == -1)
+		vars.julia_img -= JULIA_SENSI;
+	else
+		vars.julia_img += JULIA_SENSI;
+}

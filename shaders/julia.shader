@@ -7,25 +7,29 @@ out vec4 frag_color;
 uniform float center_x;
 uniform float center_y;
 uniform float zoom;
+uniform float julia_real;
+uniform float julia_img;
 
-#define MAX_ITERATION 200
+#define MAX_ITERATION 100
 #define WIDTH 980.0
 #define HEIGHT 980.0
+// #define WIDTH 1920.0
+// #define HEIGHT 1080.0
 
 int get_iterations()
 {
-	float real = ((gl_FragCoord.x / WIDTH - 0.7) * zoom + center_x);
+	float real = ((gl_FragCoord.x / WIDTH - 0.5) * zoom + center_x);
 	float img = ((gl_FragCoord.y / HEIGHT - 0.5) * zoom + center_y);
 
 	int i = 0;
-	float const_real = real;
-	float const_img = img;
+	// float const_real = real;
+	// float const_img = img;
 
 	while (i < MAX_ITERATION)
 	{
 		float tmp_real = real;
-		real = (real * real - img * img) + const_real;
-		img = (2.0 * tmp_real * img) + const_img;
+		real = (real * real - img * img) + julia_real;
+		img = (2.0 * tmp_real * img) + julia_img;
 
 		float dist = real * real + img * img;
 

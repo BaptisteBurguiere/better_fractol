@@ -8,7 +8,7 @@ uniform float center_x;
 uniform float center_y;
 uniform float zoom;
 
-#define MAX_ITERATION 200
+#define MAX_ITERATION 500
 #define WIDTH 980.0
 #define HEIGHT 980.0
 
@@ -23,6 +23,11 @@ int get_iterations()
 
 	while (i < MAX_ITERATION)
 	{
+		if (real < 0)
+			real = real * -1.0;
+		if (img < 0)
+			img = img * -1.0;
+
 		float tmp_real = real;
 		real = (real * real - img * img) + const_real;
 		img = (2.0 * tmp_real * img) + const_img;
